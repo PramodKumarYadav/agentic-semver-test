@@ -58,7 +58,7 @@ Three workflows live in `.github/workflows`:
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
 | `ci.yml` | PR + push to `main` | Runs `npm test` on Node 20 and 22 |
-| `agentic-semver.yml` | PR into `main` | Runs the action: classifies the diff, bumps `package.json`, updates `CHANGELOG.md`, labels the PR, comments the summary |
+| `agentic-semver.yml` | PR into `main` | Runs `npm test`, then the action: classifies the diff, bumps `package.json`, updates `CHANGELOG.md`, labels the PR, comments the summary |
 | `release.yml` | push to `main` | Runs `create-release`: tags `vX.Y.Z` and cuts a GitHub Release from the changelog section |
 
 `package.json` is the version file (it is first in the action's auto-detection order,
@@ -72,6 +72,18 @@ a major bump lands on a clean `2.0.0` and is impossible to misread.
    and tick **Allow GitHub Actions to create and approve pull requests**.
 3. Optional: create the labels `major`, `minor`, `patch` so `apply-label` has something
    to attach. The action creates them on demand if they are missing.
+4. Required only because `main` gates merges on the **Recommend and apply version bump**
+   status check: create a GitHub App with repository permissions `contents: write`,
+   `pull requests: write`, `issues: write`, install it on this repository, and store its
+   credentials as `SEMVER_APP_ID` and `SEMVER_APP_PRIVATE_KEY`
+   (`gh secret set SEMVER_APP_PRIVATE_KEY < your-app.private-key.pem`).
+
+   Pushes made with `GITHUB_TOKEN` do not start workflow runs, so the bump commit the
+   action pushes would land on the PR head with no check results and hold the merge.
+   `agentic-semver.yml` mints an App token and hands it to **both** `actions/checkout`
+   and the action — the `token:` on the checkout step is what sets the push identity.
+   Without the two secrets the workflow falls back to `GITHUB_TOKEN` and still works;
+   only the re-trigger is lost.
 
 ## License
 
