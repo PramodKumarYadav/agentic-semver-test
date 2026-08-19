@@ -30,3 +30,23 @@ test('normalize round-trips through parse and format', () => {
   assert.equal(normalize('90 minutes'), '1h 30m');
   assert.equal(normalize('3600 s'), '1h');
 });
+
+test('caps output at the requested number of units', () => {
+  assert.equal(format(90061000, { units: 2 }), '1d 1h');
+  assert.equal(format(90061000, { units: 1 }), '1d');
+  assert.equal(format(90061000, { units: 1, long: true }), '1 day');
+});
+
+test('units larger than the available parts is a no-op', () => {
+  assert.equal(format(5400000, { units: 10 }), '1h 30m');
+});
+
+test('units applies to negative durations', () => {
+  assert.equal(format(-90061000, { units: 2 }), '-1d 1h');
+});
+
+test('rejects a non-positive-integer units option', () => {
+  assert.throws(() => format(1000, { units: 0 }), RangeError);
+  assert.throws(() => format(1000, { units: 1.5 }), RangeError);
+  assert.throws(() => format(1000, { units: '2' }), RangeError);
+});
