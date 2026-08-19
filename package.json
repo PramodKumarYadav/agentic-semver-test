@@ -1,0 +1,27 @@
+{
+  "name": "humanms",
+  "version": "1.0.0",
+  "description": "Parse and format human-readable durations. Zero dependencies.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "duration",
+    "time",
+    "parse",
+    "format",
+    "ms"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}

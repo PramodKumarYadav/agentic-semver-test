@@ -1,0 +1,54 @@
+name: Agentic SemVer
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write # push version file + changelog commits
+  pull-requests: write # post PR comments
+  issues: write # apply major / minor / patch label
+
+concurrency:
+  group: agentic-semver-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  version:
+    name: Recommend and apply version bump
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: PramodKumarYadav/agentic-semver@v1
+        id: semver
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          comment-summary: true
+
+      # Everything below is test-harness scaffolding: it makes the action's
+      # decision visible in the run summary so results are easy to eyeball.
+      - name: Publish result to the run summary
+        env:
+          SKIPPED: ${{ steps.semver.outputs.skipped }}
+          BUMP: ${{ steps.semver.outputs.bump }}
+          CURRENT: ${{ steps.semver.outputs.current-version }}
+          NEXT: ${{ steps.semver.outputs.next-version }}
+          SUMMARY: ${{ steps.semver.outputs.summary }}
+        run: |
+          {
+            echo "### agentic-semver result"
+            echo
+            echo "| field | value |"
+            echo "| --- | --- |"
+            echo "| skipped | \`${SKIPPED}\` |"
+            echo "| bump | \`${BUMP}\` |"
+            echo "| current-version | \`${CURRENT}\` |"
+            echo "| next-version | \`${NEXT}\` |"
+            echo
+            echo "**Summary:** ${SUMMARY}"
+          } >> "$GITHUB_STEP_SUMMARY"

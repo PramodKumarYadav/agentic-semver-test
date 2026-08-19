@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write # create GitHub Releases and tags
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: PramodKumarYadav/agentic-semver/create-release@v1
+        id: release
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish result to the run summary
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          TAG: ${{ steps.release.outputs.tag }}
+          RELEASED: ${{ steps.release.outputs.released }}
+        run: |
+          {
+            echo "### create-release result"
+            echo
+            echo "- version: \`${VERSION}\`"
+            echo "- tag: \`${TAG}\`"
+            echo "- released: \`${RELEASED}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
