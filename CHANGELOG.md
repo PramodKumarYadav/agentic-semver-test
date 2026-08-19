@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - 2026-08-19
+
+- Summary: Adds a new optional `units` parameter to the `format()` function that limits output to the N most significant non-zero duration units, improving display flexibility for space-constrained UIs while maintaining full backward compatibility.
+- Add `units` option to `format()` to cap output at N most significant units
+- Add validation to throw `RangeError` when `units` is not a positive integer
+- Update README and JSDoc with `units` parameter documentation and examples
+- Add 7 new test assertions covering units capping, edge cases, and validation
+
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
