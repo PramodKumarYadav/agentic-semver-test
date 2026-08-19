@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 - 2026-08-19
+
+- Summary: Documentation-only change adding six practical recipe examples to the README. No source code, API, or test modifications. This is a maintenance update that improves developer experience without affecting functionality or compatibility.
+- Added Recipes section to README with six worked examples covering common use cases
+- Documented `units` option usage introduced in 1.1.0
+- Included examples for config TTLs, relative timestamps, precision trimming, input canonicalization, duration summing, and sorting
+
 ## 1.1.0 - 2026-08-19
 
 - Summary: Adds a new backwards-compatible `units` option to the `format()` function that caps output at N most significant non-zero units, enabling concise duration rendering for UI constraints.
