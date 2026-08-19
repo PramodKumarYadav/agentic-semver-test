@@ -2,17 +2,11 @@
 
 ## 1.1.0 - 2026-08-19
 
-- Summary: Adds a new optional `units` parameter to the `format()` function that limits output to the N most significant non-zero duration units, improving display flexibility for space-constrained UIs while maintaining full backward compatibility.
-- Add `units` option to `format()` to cap output at N most significant units
-- Add validation to throw `RangeError` when `units` is not a positive integer
-- Update README and JSDoc with `units` parameter documentation and examples
-- Add 7 new test assertions covering units capping, edge cases, and validation
-
-All notable changes to this project are documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
+- Summary: Adds a new backwards-compatible `units` option to the `format()` function that caps output at N most significant non-zero units, enabling concise duration rendering for UI constraints.
+- Add `units` option to `format()` to limit output to N most significant units
+- Add validation for `units` option with RangeError for invalid values
+- Update documentation in README and JSDoc to describe the new `units` parameter
+- Update CI workflow to test on Node 22 and 24 instead of 20 and 22
 ## [1.0.0] - 2026-08-19
 
 ### Added
