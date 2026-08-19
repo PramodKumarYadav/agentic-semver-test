@@ -25,6 +25,7 @@ parse('-45s');                      // => -45000
 format(5400000);                    // => '1h 30m'
 format(90061000, { long: true });   // => '1 day 1 hour 1 minute 1 second'
 format(5400000, { separator: ', ' });// => '1h, 30m'
+format(90061000, { units: 2 });     // => '1d 1h'
 
 normalize('90 minutes');            // => '1h 30m'
 ```
@@ -34,7 +35,7 @@ normalize('90 minutes');            // => '1h 30m'
 | Export | Description |
 | --- | --- |
 | `parse(input)` | Duration string → milliseconds. Throws `TypeError` on non-strings, `SyntaxError` on unparseable input. Returns `0` for an empty string. |
-| `format(ms, options?)` | Milliseconds → duration string. Options: `long` (spelled-out units), `separator`. |
+| `format(ms, options?)` | Milliseconds → duration string. Options: `long` (spelled-out units), `separator`, `units` (cap at the N most significant units). |
 | `normalize(input)` | `format(parse(input))` — canonicalizes a duration string. |
 | `toMs` | Deprecated alias of `parse`, kept for 0.x consumers. |
 | `UNITS`, `ALIASES` | The unit tables, exported for introspection. |
