@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 - 2026-08-19
+
+- Summary: Documentation-only change adding a Recipes section to the README with six practical usage examples. No source code, API, or test modifications.
+- Add Recipes section to README with six worked examples covering common use cases
+- Document usage patterns for config TTLs, relative timestamps, precision trimming, input canonicalization, duration summation, and sorting
+- Include verified output examples for all documented recipes against current v1.2.0 codebase
+
 ## 1.2.0 - 2026-08-19
 
 - Summary: Added year unit aliases (y/yr/yrs/year/years) to parse() function. Each year is treated as 365 days for input parsing only. This is a backward-compatible enhancement that adds new functionality without breaking existing behavior.
