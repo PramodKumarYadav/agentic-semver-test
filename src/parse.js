@@ -10,6 +10,7 @@ const TOKEN = /(-?\d+(?:\.\d+)?)\s*([a-z]+)/g;
  * parse('1h 30m')  // => 5400000
  * parse('-45s')    // => -45000
  * parse('2.5 days')// => 216000000
+ * parse('1y')     // => 31536000000 (a year is 365 days, input only)
  *
  * @param {string} input duration string
  * @returns {number} duration in milliseconds; 0 for an empty string
