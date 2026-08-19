@@ -101,7 +101,7 @@ Three workflows live in `.github/workflows`:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
-| `ci.yml` | PR + push to `main` | Runs `npm test` on Node 20 and 22 |
+| `ci.yml` | PR + push to `main` | Runs `npm test` on Node 22 and 24 |
 | `agentic-semver.yml` | PR into `main` | Runs `npm test`, then the action: classifies the diff, bumps `package.json`, updates `CHANGELOG.md`, labels the PR, comments the summary |
 | `release.yml` | push to `main` | Runs `create-release`: tags `vX.Y.Z` and cuts a GitHub Release from the changelog section |
 
