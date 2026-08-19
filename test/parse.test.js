@@ -45,3 +45,10 @@ test('rejects unknown units and garbage', () => {
 test('toMs is a deprecated alias of parse', () => {
   assert.equal(toMs('1h'), parse('1h'));
 });
+
+test('accepts year aliases as 365 days', () => {
+  const year = 365 * 86400000;
+  assert.equal(parse('1y'), year);
+  assert.equal(parse('2 years'), 2 * year);
+  assert.equal(parse('1yr 1w'), year + 604800000);
+});

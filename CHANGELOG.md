@@ -1,11 +1,12 @@
 # Changelog
 
-## 1.1.1 - 2026-08-19
+## 1.2.0 - 2026-08-19
 
-- Summary: Documentation-only change adding six practical recipe examples to the README. No source code, API, or test modifications. This is a maintenance update that improves developer experience without affecting functionality or compatibility.
-- Added Recipes section to README with six worked examples covering common use cases
-- Documented `units` option usage introduced in 1.1.0
-- Included examples for config TTLs, relative timestamps, precision trimming, input canonicalization, duration summing, and sorting
+- Summary: Added year unit aliases (y/yr/yrs/year/years) to parse() function. Each year is treated as 365 days for input parsing only. This is a backward-compatible enhancement that adds new functionality without breaking existing behavior.
+- Added year unit aliases (y, yr, yrs, year, years) to parse() function, treating each year as 365 days
+- Year units are input-only; format() and normalize() continue using weeks as the largest unit
+- Updated workflow to mint GitHub App token for bump commits to re-trigger CI checks
+- Added pre-bump test execution gate in semver workflow to prevent versioning PRs with failing tests
 
 ## 1.1.0 - 2026-08-19
 

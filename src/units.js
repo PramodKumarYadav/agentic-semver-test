@@ -41,4 +41,11 @@ export const ALIASES = new Map([
   ['wks', 604800000],
   ['week', 604800000],
   ['weeks', 604800000],
+  // Years are input-only: 365 days, no leap-year handling. `format` never emits
+  // them, so normalize('1y') round-trips to weeks and days.
+  ['y', 31536000000],
+  ['yr', 31536000000],
+  ['yrs', 31536000000],
+  ['year', 31536000000],
+  ['years', 31536000000],
 ]);

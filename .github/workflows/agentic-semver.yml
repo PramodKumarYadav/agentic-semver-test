@@ -16,17 +16,52 @@ concurrency:
 
 jobs:
   version:
+    # This job name is the required-status-check context configured on `main`.
+    # Renaming it silently breaks the merge gate.
     name: Recommend and apply version bump
     runs-on: ubuntu-latest
+
+    # The `secrets` context is not dependable inside a step-level `if:`, so it is
+    # surfaced as env first. Lets the workflow run before the App exists.
+    env:
+      HAS_APP: ${{ secrets.SEMVER_APP_ID != '' && secrets.SEMVER_APP_PRIVATE_KEY != '' }}
+
     steps:
+      # Pushes made with GITHUB_TOKEN do not start workflow runs — GitHub blocks that
+      # so a workflow cannot re-trigger itself. That means the bump commit this action
+      # pushes becomes the PR head with no check results attached, and the required
+      # status check holds the merge until someone re-runs the job by hand. An App
+      # installation token is a different credential and is not subject to the guard.
+      - name: Mint a GitHub App token
+        id: app-token
+        if: ${{ env.HAS_APP == 'true' }}
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SEMVER_APP_ID }}
+          private-key: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # The push identity comes from the credentials checkout persists, so this
+          # token — not the one handed to the action below — is what decides whether
+          # the bump commit starts a workflow run.
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Gate the bump on the tests. Without this, ci.yml and this workflow race and a
+      # pull request with failing tests still gets a version bump and a changelog entry.
+      # ci.yml still owns the full matrix and the push-to-main runs.
+      - name: Run tests
+        run: npm test
 
       - uses: PramodKumarYadav/agentic-semver@v1
         id: semver
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           comment-summary: true
 
@@ -39,12 +74,14 @@ jobs:
           CURRENT: ${{ steps.semver.outputs.current-version }}
           NEXT: ${{ steps.semver.outputs.next-version }}
           SUMMARY: ${{ steps.semver.outputs.summary }}
+          TOKEN_KIND: ${{ env.HAS_APP == 'true' && 'github-app' || 'GITHUB_TOKEN' }}
         run: |
           {
             echo "### agentic-semver result"
             echo
             echo "| field | value |"
             echo "| --- | --- |"
+            echo "| push identity | \`${TOKEN_KIND}\` |"
             echo "| skipped | \`${SKIPPED}\` |"
             echo "| bump | \`${BUMP}\` |"
             echo "| current-version | \`${CURRENT}\` |"
