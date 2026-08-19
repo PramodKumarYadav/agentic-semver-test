@@ -59,6 +59,13 @@ const ago = (since) => `${format(Date.now() - since, { long: true })} ago`;
 ago(Date.now() - 5400000); // => '1 hour 30 minutes ago'
 ```
 
+**Trim precision for tight spaces**
+
+```js
+format(788645000);               // => '1w 2d 3h 4m 5s'
+format(788645000, { units: 2 }); // => '1w 2d'    — badges, tables, log prefixes
+```
+
 **Canonicalize user input before storing it**
 
 ```js
