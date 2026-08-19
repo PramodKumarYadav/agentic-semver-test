@@ -43,6 +43,50 @@ normalize('90 minutes');            // => '1h 30m'
 Supported units: `ms`, `s`, `m`, `h`, `d`, `w` plus their long forms
 (`second(s)`, `minute(s)`, `hour(s)`, `day(s)`, `week(s)`, …), case-insensitive.
 
+### Recipes
+
+**Config values that read like English**
+
+```js
+const cache = { ttl: parse(process.env.CACHE_TTL ?? '15m') };
+setTimeout(flush, parse('1h 30m'));
+```
+
+**Relative timestamps**
+
+```js
+const ago = (since) => `${format(Date.now() - since, { long: true })} ago`;
+ago(Date.now() - 5400000); // => '1 hour 30 minutes ago'
+```
+
+**Trim precision for tight spaces**
+
+```js
+format(788645000);               // => '1w 2d 3h 4m 5s'
+format(788645000, { units: 2 }); // => '1w 2d'    — badges, tables, log prefixes
+```
+
+**Canonicalize user input before storing it**
+
+```js
+normalize('120 seconds'); // => '2m'   — store this, not the raw string
+normalize('1.5 hours');   // => '1h 30m'
+```
+
+**Sum a list of durations**
+
+```js
+const total = ['45m', '1h 15m', '30s'].map(parse).reduce((a, b) => a + b, 0);
+format(total); // => '2h 30s'
+```
+
+**Sort by duration**
+
+```js
+['1d', '90m', '45s'].sort((a, b) => parse(a) - parse(b));
+// => ['45s', '90m', '1d']
+```
+
 ### Run the tests
 
 ```bash
@@ -57,7 +101,7 @@ Three workflows live in `.github/workflows`:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
-| `ci.yml` | PR + push to `main` | Runs `npm test` on Node 20 and 22 |
+| `ci.yml` | PR + push to `main` | Runs `npm test` on Node 22 and 24 |
 | `agentic-semver.yml` | PR into `main` | Runs `npm test`, then the action: classifies the diff, bumps `package.json`, updates `CHANGELOG.md`, labels the PR, comments the summary |
 | `release.yml` | push to `main` | Runs `create-release`: tags `vX.Y.Z` and cuts a GitHub Release from the changelog section |
 

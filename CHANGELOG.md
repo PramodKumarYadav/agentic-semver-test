@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1 - 2026-08-19
+
+- Summary: Documentation-only update adding practical usage recipes to README with no changes to source code, tests, or public API
+- Add Recipes section to README with six practical examples (config TTLs, relative timestamps, canonicalization, precision trimming, duration summing, and sorting)
+- Document usage of `units` option in format examples
+- Update CI workflow table to reflect Node 22 and 24 test matrix
 ## 1.2.0 - 2026-08-19
 
 - Summary: Added year unit aliases (y/yr/yrs/year/years) to parse() function. Each year is treated as 365 days for input parsing only. This is a backward-compatible enhancement that adds new functionality without breaking existing behavior.
