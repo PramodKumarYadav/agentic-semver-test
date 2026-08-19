@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 - 2026-08-19
+
+- Summary: Added year unit aliases (y/yr/yrs/year/years) to parse() function. Each year is treated as 365 days for input parsing only. This is a backward-compatible enhancement that adds new functionality without breaking existing behavior.
+- Added year unit aliases (y, yr, yrs, year, years) to parse() function, treating each year as 365 days
+- Year units are input-only; format() and normalize() continue using weeks as the largest unit
+- Updated workflow to mint GitHub App token for bump commits to re-trigger CI checks
+- Added pre-bump test execution gate in semver workflow to prevent versioning PRs with failing tests
+
 ## 1.1.0 - 2026-08-19
 
 - Summary: Adds a new backwards-compatible `units` option to the `format()` function that caps output at N most significant non-zero units, enabling concise duration rendering for UI constraints.
